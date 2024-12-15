@@ -58,14 +58,7 @@ fun MWeiChatTheme(
     val weChatTextSecondary = Color(0xFFAAAAAA)
 
     MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = weChatTextPrimary,
-            onPrimary = Color.Black,
-            background = weChatDarkBackground,
-            surface = weChatDarkSurface,
-            onSurface = weChatTextPrimary,
-            secondary = weChatTextSecondary,
-        ),
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )

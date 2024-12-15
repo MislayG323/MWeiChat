@@ -27,8 +27,6 @@ fun ChatItem(
     name: String,
     message: String,
     time: String,
-    textColorPrimary: Color,
-    textColorSecondary: Color,
     onClick: () -> Unit // 增加点击回调参数
 ) {
     Row(
@@ -55,7 +53,6 @@ fun ChatItem(
         ) {
             Text(
                 text = name,
-                color = textColorPrimary,
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -65,7 +62,6 @@ fun ChatItem(
 
             Text(
                 text = message,
-                color = textColorSecondary,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -75,7 +71,6 @@ fun ChatItem(
         // 消息时间
         Text(
             text = time,
-            color = textColorSecondary,
             style = MaterialTheme.typography.bodySmall,
             fontSize = 12.sp
         )
@@ -92,8 +87,6 @@ fun PreviewChatItem() {
         name = "张三",
         message = "这是最后一条消息",
         time = "12:30",
-        textColorPrimary = Color(0xFFECECEC),
-        textColorSecondary = Color(0xFFAAAAAA),
         onClick = {
             
         }

@@ -11,7 +11,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.home.HomeScreen
-import com.example.home.MessageDetailScreen
+import com.example.home.Message
+import com.example.home.WeChatChatScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -27,7 +28,17 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             // 从 NavBackStackEntry 中获取参数
             val messageId = backStackEntry.arguments?.getString("messageId")
             messageId?.let {
-                MessageDetailScreen(it)
+                val messages = listOf(
+                    Message("user1", "你好，最近怎么样？", "10:00 AM"),
+                    Message("user2", "挺好的，你呢？", "10:01 AM"),
+                    Message("user1", "我也很好，周末一起吃饭吧！", "10:02 AM")
+                )
+                WeChatChatScreen(
+                    messages = messages,
+                    currentUser = "user1",
+                    chatTitle = messageId,
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }
