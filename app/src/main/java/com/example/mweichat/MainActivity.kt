@@ -45,16 +45,13 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold (
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
-
+        bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
         NavHost(
-               navController = navController,
+            navController = navController,
             startDestination = "home",
             Modifier.padding(innerPadding)
-                ) {
+        ) {
             composable("home") { HomeScreen() }
             composable("contacts") { Text(text = "contacts") }
             composable("discover") { Text(text = "discover") }

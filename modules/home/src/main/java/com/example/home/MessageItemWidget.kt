@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,12 +28,14 @@ fun ChatItem(
     message: String,
     time: String,
     textColorPrimary: Color,
-    textColorSecondary: Color
+    textColorSecondary: Color,
+    onClick: () -> Unit // 增加点击回调参数
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onClick() }, // 添加点击事件
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         // 图片
@@ -91,5 +94,8 @@ fun PreviewChatItem() {
         time = "12:30",
         textColorPrimary = Color(0xFFECECEC),
         textColorSecondary = Color(0xFFAAAAAA),
+        onClick = {
+            
+        }
     )
 }
