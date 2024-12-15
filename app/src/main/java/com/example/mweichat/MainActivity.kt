@@ -4,15 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,12 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.home.HomeScreen
 import com.example.mweichat.ui.theme.MWeiChatTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,60 +29,56 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             MWeiChatTheme {
-                MainScreen()
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    MainScreen(navController)
+                }
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
+fun MainScreen(navController: NavHostController) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold (
-        bottomBar = { BottomNavigationBar(navController = navController) }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            Modifier.padding(innerPadding)
-        ) {
-            composable("home") { HomeScreen() }
-            composable("contacts") { Text(text = "contacts") }
-            composable("discover") { Text(text = "discover") }
-            composable("profile") { Text(text = "profile") }
+        bottomBar = {
+            if (currentRoute in bottomBarRoutes) {
+                BottomNavigationBar(navController = navController)
+            }
         }
+    ) { innerPadding ->
+        AppNavigation(navController, Modifier.padding(innerPadding))
     }
 }
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val items = listOf(
-        BottomNavItem("home", "首页", Icons.Default.Home),
-        BottomNavItem("contacts", "通讯录", Icons.Default.Person),
-        BottomNavItem("discover", "发现", Icons.Default.Search),
-        BottomNavItem("profile", "我的", Icons.Default.Person)
-    )
-
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
+        bottomNavigationItems.forEach { item ->
             NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                label = { Text(item.title) },
                 selected = currentRoute == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (currentRoute != item.route) {
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                //saveState = true
+                            }
+                            launchSingleTop = true
+                            //restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                },
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) }
+
+                }
             )
         }
     }
@@ -97,7 +89,10 @@ data class BottomNavItem(val route: String, val title: String, val icon: ImageVe
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+    val navController = rememberNavController()
     MWeiChatTheme {
-        MainScreen()
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+            MainScreen(navController)
+        }
     }
 }
