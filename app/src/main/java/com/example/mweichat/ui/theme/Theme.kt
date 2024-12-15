@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -50,8 +51,21 @@ fun MWeiChatTheme(
         else -> LightColorScheme
     }
 
+    // 定义微信 Dark 模式背景色
+    val weChatDarkBackground = Color(0xFF1F1F1F)
+    val weChatDarkSurface = Color(0xFF2C2C2C)
+    val weChatTextPrimary = Color(0xFFECECEC)
+    val weChatTextSecondary = Color(0xFFAAAAAA)
+
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = darkColorScheme(
+            primary = weChatTextPrimary,
+            onPrimary = Color.Black,
+            background = weChatDarkBackground,
+            surface = weChatDarkSurface,
+            onSurface = weChatTextPrimary,
+            secondary = weChatTextSecondary,
+        ),
         typography = Typography,
         content = content
     )
